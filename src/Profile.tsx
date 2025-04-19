@@ -20,13 +20,14 @@ export const Profile = () => {
   const [data, setData] = useState<GitHubProfile | null>(null); // Initialize as null to represent no data yet
   const [hasError, setHasError] = useState<ErrorState | null>(null); // More specific error type
   const [isFetching, setIsFetching] = useState<boolean>(false);
+  const [userName, setUserName] = useState<string>("Shameeza-Akbar");
 
   useEffect(() => {
     async function handleFetch() {
       setIsFetching(true);
       setHasError(null); // Reset error state on new fetch attempt
       try {
-        const response = await fetch(`https://api.github.com/users/Shameeza-Akbar`);
+        const response = await fetch(`https://api.github.com/users/${userName}`);
         if (!response.ok) {
           const errorData = await response.json(); // Try to get more specific error info from the API
           throw new Error(errorData?.message || `Failed to fetch data: ${response.status}`);
@@ -39,11 +40,18 @@ export const Profile = () => {
         setIsFetching(false);
       }
     }
-    handleFetch();
-  }, []);
 
+    handleFetch();
+  }, [userName]);
+function handleChange(event){
+setUserName(event.target.value)
+}
   if (hasError) {
-    return <h1>Error: {hasError.message}</h1>;
+    return <div>
+    <label>Search Profile: </label>
+    <input type='text' placeholder='Username' value={userName} onChange={handleChange}></input>
+    <h1>No user data found</h1>
+    </div>
   }
 
   if (isFetching) {
@@ -52,6 +60,8 @@ export const Profile = () => {
 
   return data ? (
     <div>
+        <label>Search Profile: </label>
+        <input type='text' placeholder='Username' value={userName} onChange={handleChange}></input>
       {data.name && <h1>{data.name}</h1>}
       {data.avatar_url && (
         <img
@@ -77,6 +87,10 @@ export const Profile = () => {
       )}
     </div>
   ) : (
+    <div>
+    <label>Search Profile: </label>
+    <input type='text' placeholder='Username' value={userName} onChange={handleChange}></input>
     <h1>No user data found</h1>
+    </div>
   );
 };
