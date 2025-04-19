@@ -16,7 +16,7 @@ export const Profile = () => {
         const resData = await response.json();
         setData(resData);
       } catch (error) {
-        setHasError({ message: error.message || "Try again later" });
+        setHasError({ message : error.message || "Try again later" });
       }
       setIsFetching(false);
     }
