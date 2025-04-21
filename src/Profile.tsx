@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 // Define a more specific type for the expected data structure
 interface GitHubProfile {
@@ -21,7 +21,7 @@ export const Profile = () => {
   const [hasError, setHasError] = useState<ErrorState | null>(null); // More specific error type
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>("Shameeza-Akbar");
-
+  const input = useRef("")
   useEffect(() => {
     async function handleFetch() {
       setIsFetching(true);
@@ -43,25 +43,34 @@ export const Profile = () => {
 
     handleFetch();
   }, [userName]);
-function handleChange(event){
-setUserName(event.target.value)
+function handleSubmit(event){
+  event.preventDefault()
+  let uName= input.current.value;
+  setUserName(uName)
 }
   if (hasError) {
     return <div>
-    <label>Search Profile: </label>
-    <input type='text' placeholder='Username' value={userName} onChange={handleChange}></input>
-    <h1>No user data found</h1>
+    <form onSubmit={handleSubmit}>
+        <label>Search Profile: </label>
+        <input type='text' placeholder='Username' name='user' ref={input}></input>
+        <button>Search</button>
+      </form>
+  
+      
+      <h1>{hasError.message}</h1>
     </div>
   }
 
   if (isFetching) {
     return <h1>Loading...</h1>;
   }
-
-  return data ? (
-    <div>
+  if (data){
+  return <div>
+      <form onSubmit={handleSubmit}>
         <label>Search Profile: </label>
-        <input type='text' placeholder='Username' value={userName} onChange={handleChange}></input>
+        <input type='text' placeholder='Username' name='user' ref={input}></input>
+        <button>Search</button>
+      </form>
       {data.name && <h1>{data.name}</h1>}
       {data.avatar_url && (
         <img
@@ -85,12 +94,5 @@ setUserName(event.target.value)
           </a>
         </p>
       )}
-    </div>
-  ) : (
-    <div>
-    <label>Search Profile: </label>
-    <input type='text' placeholder='Username' value={userName} onChange={handleChange}></input>
-    <h1>No user data found</h1>
-    </div>
-  );
+    </div>}
 };
