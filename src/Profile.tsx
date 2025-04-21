@@ -3,12 +3,14 @@ import { useEffect, useState, useRef } from 'react';
 // Define a more specific type for the expected data structure
 interface GitHubProfile {
   name?: string;
+  email: string | null;
   avatar_url?: string;
   bio?: string;
   followers?: number;
   following?: number;
   public_repos?: number;
   html_url?: string;
+  location: string | null;
   // Add other properties you expect from the GitHub API
 }
 
@@ -80,7 +82,9 @@ function handleSubmit(event){
         />
       )}
       {data.name && <p>Username: {data.name}</p>}
+      {data.email && <p>Email: {data.email}</p>}
       {data.bio && <p>Bio: {data.bio}</p>}
+      {data.location && <p>Location: {data.location}</p>}
       {typeof data.followers === 'number' && <p>Followers: {data.followers}</p>}
       {typeof data.following === 'number' && <p>Following: {data.following}</p>}
       {typeof data.public_repos === 'number' && (
