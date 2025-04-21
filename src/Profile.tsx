@@ -22,7 +22,7 @@ export const Profile = () => {
   const [data, setData] = useState<GitHubProfile | null>(null); // Initialize as null to represent no data yet
   const [hasError, setHasError] = useState<ErrorState | null>(null); // More specific error type
   const [isFetching, setIsFetching] = useState<boolean>(false);
-  const [userName, setUserName] = useState<string>("Shameeza-Akbar");
+  const [userName, setUserName] = useState<string>("");
   const input = useRef("")
   useEffect(() => {
     async function handleFetch() {
@@ -57,8 +57,6 @@ function handleSubmit(event){
         <input type='text' placeholder='Username' name='user' ref={input}></input>
         <button>Search</button>
       </form>
-  
-      
       <h1>{hasError.message}</h1>
     </div>
   }
